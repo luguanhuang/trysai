@@ -2,6 +2,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/core/i18n/config";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ThemeProvider } from "@/core/theme/provider";
+import { AppContextProvider } from "@/contexts/app";
 
 export async function generateMetadata({
   params,
@@ -33,5 +35,11 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
 
-  return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
+  return (
+    <NextIntlClientProvider>
+      <ThemeProvider>
+        <AppContextProvider>{children}</AppContextProvider>
+      </ThemeProvider>
+    </NextIntlClientProvider>
+  );
 }

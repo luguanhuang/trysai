@@ -3,6 +3,7 @@ import { config } from "dotenv";
 
 export interface Configs {
   webUrl?: string;
+  defaultTheme?: string;
   databaseUrl?: string;
   databaseDriver?: string;
   databaseProvider?: string;
@@ -29,6 +30,7 @@ export function getConfigs() {
     // config({ path: ".env.local" });
     // config({ path: ".env.development" });
     // config({ path: ".env.production" });
+    configs.defaultTheme = process.env.NEXT_PUBLIC_DEFAULT_THEME || "system";
 
     // database
     configs.databaseUrl = process.env.DATABASE_URL || "";
