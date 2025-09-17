@@ -25,10 +25,10 @@ export class AdsenseProvider implements AdsProvider {
   getHeadScripts(): ReactNode {
     return (
       <script
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${this.configs.adId}`}
         async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${this.configs.adId}`}
         crossOrigin="anonymous"
-      />
+      ></script>
     );
   }
 
