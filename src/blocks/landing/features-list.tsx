@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Features as FeaturesType } from "@/types/blocks/landing";
 import { SmartIcon } from "@/blocks/common";
@@ -28,17 +28,21 @@ export function FeaturesList({
               {features.buttons && features.buttons.length > 0 && (
                 <div className="flex items-center gap-2 justify-center">
                   {features.buttons?.map((button, idx) => (
-                    <Button variant="outline" asChild key={idx}>
-                      <Link
-                        href={button.url ?? ""}
-                        target={button.target ?? "_self"}
-                      >
-                        {button.icon && (
-                          <SmartIcon name={button.icon as string} size={24} />
-                        )}
-                        {button.title}
-                      </Link>
-                    </Button>
+                    <Link
+                      key={idx}
+                      href={button.url ?? ""}
+                      target={button.target ?? "_self"}
+                      className={cn(
+                        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+                        "h-9 px-4 py-2",
+                        "shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50"
+                      )}
+                    >
+                      {button.icon && (
+                        <SmartIcon name={button.icon as string} size={24} />
+                      )}
+                      {button.title}
+                    </Link>
                   ))}
                 </div>
               )}

@@ -5,11 +5,12 @@ import { getUuid } from "@/lib/hash";
 import { getUserInfo } from "@/services/user";
 import { addPost, NewPost, PostType } from "@/services/post";
 import { PostStatus } from "@/services/post";
+import { Empty } from "@/blocks/common";
 
 export default async function PostAddPage() {
   const user = await getUserInfo();
   if (!user) {
-    return "no auth";
+    return <Empty message="no auth" />;
   }
 
   const form: Form = {
@@ -34,7 +35,7 @@ export default async function PostAddPage() {
       },
       {
         name: "content",
-        type: "editor",
+        type: "markdown_editor",
         title: "Content",
       },
     ],

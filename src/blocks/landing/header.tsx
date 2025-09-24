@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@/core/i18n/navigation";
 import {
@@ -262,23 +261,23 @@ export function Header({ header }: { header: HeaderType }) {
 
                   {header.buttons &&
                     header.buttons.map((button, idx) => (
-                      <Button
-                        asChild
+                      <Link
                         key={idx}
-                        variant={button.variant || "default"}
-                        size={button.size || "sm"}
-                        className="h-7 ring-0"
+                        href={button.url || ""}
+                        target={button.target || "_self"}
+                        className={cn(
+                          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+                          "h-7 ring-0 px-3",
+                          button.variant === "outline"
+                            ? "shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50"
+                            : "shadow-md border-[0.5px] border-white/25 shadow-black/20 bg-primary ring-1 ring-(--ring-color) [--ring-color:color-mix(in_oklab,var(--color-foreground)15%,var(--color-primary))] text-primary-foreground hover:bg-primary/90"
+                        )}
                       >
-                        <Link
-                          href={button.url || ""}
-                          target={button.target || "_self"}
-                        >
-                          {button.icon && (
-                            <SmartIcon name={button.icon as string} />
-                          )}
-                          <span>{button.title}</span>
-                        </Link>
-                      </Button>
+                        {button.icon && (
+                          <SmartIcon name={button.icon as string} />
+                        )}
+                        <span>{button.title}</span>
+                      </Link>
                     ))}
                 </div>
               </div>

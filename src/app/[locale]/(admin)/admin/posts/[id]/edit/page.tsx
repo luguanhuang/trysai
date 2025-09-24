@@ -15,6 +15,7 @@ import {
   TaxonomyStatus,
   TaxonomyType,
 } from "@/services/taxonomy";
+import { Empty } from "@/blocks/common";
 
 export default async function PostEditPage({
   params,
@@ -25,16 +26,12 @@ export default async function PostEditPage({
 
   const post = await findPost({ id });
   if (!post) {
-    return "Post not found";
+    return <Empty message="Post not found" />;
   }
 
   const user = await getUserInfo();
   if (!user) {
-    return "no auth";
-  }
-
-  if (post.userId !== user.id) {
-    return "access denied";
+    return <Empty message="no auth" />;
   }
 
   const categories = await getTaxonomies({
@@ -76,7 +73,7 @@ export default async function PostEditPage({
       },
       {
         name: "content",
-        type: "editor",
+        type: "markdown_editor",
         title: "Content",
       },
     ],
@@ -94,7 +91,7 @@ export default async function PostEditPage({
         "use server";
 
         const { user, post } = passby;
-        if (!user || !post || post.userId !== user.id) {
+        if (!user || !post) {
           throw new Error("no auth");
         }
 

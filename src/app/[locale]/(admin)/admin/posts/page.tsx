@@ -70,6 +70,13 @@ export default async function PostsPage({
               icon: "RiEditLine",
               url: `/admin/posts/${item.id}/edit`,
             },
+            {
+              name: "view",
+              title: "View",
+              icon: "RiEyeLine",
+              url: `/blog/${item.slug}`,
+              target: "_blank",
+            },
           ];
         },
       },

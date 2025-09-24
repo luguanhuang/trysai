@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
 @layer base {
   * {

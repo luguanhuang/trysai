@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -32,9 +32,16 @@ export function Pricing() {
               <span className="my-3 block text-2xl font-semibold">$0 / mo</span>
 
               <CardDescription className="text-sm">Per editor</CardDescription>
-              <Button asChild variant="outline" className="mt-4 w-full">
-                <Link href="">Get Started</Link>
-              </Button>
+              <Link
+                href=""
+                className={cn(
+                  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+                  "mt-4 w-full h-9 px-4 py-2",
+                  "shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50"
+                )}
+              >
+                Get Started
+              </Link>
             </CardHeader>
 
             <CardContent className="space-y-4">
@@ -69,9 +76,16 @@ export function Pricing() {
 
               <CardDescription className="text-sm">Per editor</CardDescription>
 
-              <Button asChild className="mt-4 w-full">
-                <Link href="">Get Started</Link>
-              </Button>
+              <Link
+                href=""
+                className={cn(
+                  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+                  "mt-4 w-full h-9 px-4 py-2",
+                  "shadow-md border-[0.5px] border-white/25 shadow-black/20 bg-primary text-primary-foreground hover:bg-primary/90"
+                )}
+              >
+                Get Started
+              </Link>
             </CardHeader>
 
             <CardContent className="space-y-4">
@@ -109,9 +123,16 @@ export function Pricing() {
 
               <CardDescription className="text-sm">Per editor</CardDescription>
 
-              <Button asChild variant="outline" className="mt-4 w-full">
-                <Link href="">Get Started</Link>
-              </Button>
+              <Link
+                href=""
+                className={cn(
+                  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+                  "mt-4 w-full h-9 px-4 py-2",
+                  "shadow-sm shadow-black/15 border border-transparent bg-background ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50"
+                )}
+              >
+                Get Started
+              </Link>
             </CardHeader>
 
             <CardContent className="space-y-4">

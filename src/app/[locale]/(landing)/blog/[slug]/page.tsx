@@ -5,8 +5,6 @@ import { envConfigs } from "@/config";
 import { Post as PostType } from "@/types/blocks/blog";
 import { Empty } from "@/blocks/common";
 import moment from "moment";
-import { Crumb } from "@/blocks/common/crumb";
-import { NavItem } from "@/types/blocks/common";
 
 export async function generateMetadata({
   params,

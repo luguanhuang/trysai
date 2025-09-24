@@ -2,8 +2,7 @@ import { type Post as PostType } from "@/types/blocks/blog";
 import { Crumb } from "@/blocks/common/crumb";
 import { NavItem } from "@/types/blocks/common";
 import { getTranslations } from "next-intl/server";
-
-const MESCHAC_AVATAR = "https://avatars.githubusercontent.com/u/47919550?v=4";
+import { MarkdownPreview } from "@/blocks/common";
 
 export async function PostDetail({ post }: { post: PostType }) {
   const t = await getTranslations("blog");
@@ -35,9 +34,12 @@ export async function PostDetail({ post }: { post: PostType }) {
               <p className="text-muted-foreground text-sm mb-4">
                 {post.created_at}
               </p>
-              <div className="text-muted-foreground space-y-4 text-lg *:leading-relaxed">
-                {post.content}
-              </div>
+
+              {post.content && (
+                <div className="my-8 text-muted-foreground space-y-4 text-lg *:leading-relaxed">
+                  <MarkdownPreview content={post.content} />
+                </div>
+              )}
 
               <div className="mt-12">
                 <div className="mt-6 flex items-center gap-3 pb-2 pl-px">

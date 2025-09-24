@@ -16,7 +16,7 @@ import { SmartIcon } from "@/blocks/common/smart-icon";
 import { Input } from "./input";
 import { Loader } from "lucide-react";
 import { Select } from "./select";
-// import MarkdownEditor from "@/components/blocks/mdeditor";
+import { Markdown } from "./markdown";
 
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -202,6 +202,8 @@ export function Form({
                             </div>
                           ))}
                         </div>
+                      ) : item.type === "markdown_editor" ? (
+                        <Markdown field={item} formField={field} data={data} />
                       ) : (
                         <Input field={item} formField={field} data={data} />
                       )}
