@@ -3,8 +3,7 @@ import { revalidateTag, unstable_cache } from 'next/cache';
 import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import { config } from '@/config/db/schema';
-
-import { publicSettingNames } from '../services/settings';
+import { publicSettingNames } from '@/shared/services/settings';
 
 export type Config = typeof config.$inferSelect;
 export type NewConfig = typeof config.$inferInsert;
@@ -35,14 +34,14 @@ export async function saveConfigs(configs: Record<string, string>) {
     return results;
   });
 
-  revalidateTag(CACHE_TAG_CONFIGS, {});
+  revalidateTag(CACHE_TAG_CONFIGS, 'max');
 
   return result;
 }
 
 export async function addConfig(newConfig: NewConfig) {
   const [result] = await db().insert(config).values(newConfig).returning();
-  revalidateTag(CACHE_TAG_CONFIGS, {});
+  revalidateTag(CACHE_TAG_CONFIGS, 'max');
 
   return result;
 }
