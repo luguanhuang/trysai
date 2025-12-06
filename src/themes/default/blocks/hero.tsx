@@ -1,10 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
 import { Link } from '@/core/i18n/navigation';
-import { LazyImage, SmartIcon } from '@/shared/blocks/common';
+import { SmartIcon } from '@/shared/blocks/common';
 import { AnimatedGridPattern } from '@/shared/components/ui/animated-grid-pattern';
 import { Button } from '@/shared/components/ui/button';
 import { Highlighter } from '@/shared/components/ui/highlighter';
@@ -144,44 +145,49 @@ export function Hero({
         </div>
       </section>
       {section.image && (
-        <motion.section
-          className="border-foreground/10 relative mt-8 border-y sm:mt-16"
-          initial={{ opacity: 0, y: 20, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{
-            delay: 0.9,
-            duration: 0.7,
-            ease: [0.22, 1, 0.36, 1] as const,
-          }}
-        >
+        <section className="border-foreground/10 relative mt-8 border-y sm:mt-16">
           <div className="relative z-10 mx-auto max-w-6xl border-x px-3">
             <div className="border-x">
               <div
                 aria-hidden
                 className="h-3 w-full bg-[repeating-linear-gradient(-45deg,var(--color-foreground),var(--color-foreground)_1px,transparent_1px,transparent_4px)] opacity-5"
               />
-              <LazyImage
-                className="border-border/25 relative z-2 hidden border dark:block"
-                src={section.image_invert?.src || section.image?.src || ''}
-                alt={section.image_invert?.alt || section.image?.alt || ''}
-              />
-              <LazyImage
-                className="border-border/25 relative z-2 border dark:hidden"
-                src={section.image?.src || section.image_invert?.src || ''}
-                alt={section.image?.alt || section.image_invert?.alt || ''}
-              />
+              {(section.image_invert?.src || section.image?.src) && (
+                <Image
+                  className="border-border/25 relative z-2 hidden w-full border dark:block"
+                  src={section.image_invert?.src || section.image?.src || ''}
+                  alt={section.image_invert?.alt || section.image?.alt || ''}
+                  width={1200}
+                  height={630}
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  priority
+                />
+              )}
+              {(section.image?.src || section.image_invert?.src) && (
+                <Image
+                  className="border-border/25 relative z-2 block w-full border dark:hidden"
+                  src={section.image?.src || section.image_invert?.src || ''}
+                  alt={section.image?.alt || section.image_invert?.alt || ''}
+                  width={1200}
+                  height={630}
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  priority
+                />
+              )}
             </div>
           </div>
-        </motion.section>
+        </section>
       )}
 
       {section.background_image ? (
         <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden">
           <div className="from-background/80 via-background/80 to-background absolute inset-0 z-10 bg-gradient-to-b" />
-          <LazyImage
+          <Image
             src={section.background_image?.src || ''}
             alt={section.background_image?.alt || ''}
-            className="h-full w-full object-cover opacity-20 blur-[0px]"
+            className="object-cover opacity-60 blur-[0px]"
+            fill
+            priority
           />
         </div>
       ) : section.show_bg !== false ? (

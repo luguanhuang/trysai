@@ -6,6 +6,7 @@ import NextTopLoader from 'nextjs-toploader';
 
 import { envConfigs } from '@/config';
 import { locales } from '@/config/locale';
+import { getAllConfigs } from '@/shared/models/config';
 import { getAdsService } from '@/shared/services/ads';
 import { getAffiliateService } from '@/shared/services/affiliate';
 import { getAnalyticsService } from '@/shared/services/analytics';
@@ -62,26 +63,32 @@ export default async function RootLayout({
   let customerServiceBodyScripts = null;
 
   if (isProduction || isDebug) {
+    const configs = await getAllConfigs();
+
+    const [adsService, analyticsService, affiliateService, customerService] =
+      await Promise.all([
+        getAdsService(configs),
+        getAnalyticsService(configs),
+        getAffiliateService(configs),
+        getCustomerService(configs),
+      ]);
+
     // get ads components
-    const adsService = await getAdsService();
     adsMetaTags = adsService.getMetaTags();
     adsHeadScripts = adsService.getHeadScripts();
     adsBodyScripts = adsService.getBodyScripts();
 
     // get analytics components
-    const analyticsService = await getAnalyticsService();
     analyticsMetaTags = analyticsService.getMetaTags();
     analyticsHeadScripts = analyticsService.getHeadScripts();
     analyticsBodyScripts = analyticsService.getBodyScripts();
 
     // get affiliate components
-    const affiliateService = await getAffiliateService();
     affiliateMetaTags = affiliateService.getMetaTags();
     affiliateHeadScripts = affiliateService.getHeadScripts();
     affiliateBodyScripts = affiliateService.getBodyScripts();
 
     // get customer service components
-    const customerService = await getCustomerService();
     customerServiceMetaTags = customerService.getMetaTags();
     customerServiceHeadScripts = customerService.getHeadScripts();
     customerServiceBodyScripts = customerService.getBodyScripts();
