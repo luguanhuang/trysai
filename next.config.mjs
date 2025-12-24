@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import bundleAnalyzer from '@next/bundle-analyzer';
 import { createMDX } from 'fumadocs-mdx/next';
 import createNextIntlPlugin from 'next-intl/plugin';
@@ -12,11 +14,33 @@ const withNextIntl = createNextIntlPlugin({
   requestConfig: './src/core/i18n/request.ts',
 });
 
+const getSchemaAliasTarget = () => {
+  const databaseProvider = process.env.DATABASE_PROVIDER ?? 'postgresql';
+
+  if (['sqlite', 'turso'].includes(databaseProvider)) {
+    return './src/config/db/schema.sqlite.ts';
+  }
+
+  return './src/config/db/schema.ts';
+};
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const schemaAliasTarget = getSchemaAliasTarget();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: process.env.VERCEL ? undefined : 'standalone',
   reactStrictMode: false,
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  webpack: (config) => {
+    // Build-time schema selection while keeping imports stable:
+    // import { user } from '@/config/db/schema'
+    config.resolve.alias['@/config/db/schema'] = path.resolve(
+      __dirname,
+      schemaAliasTarget
+    );
+    return config;
+  },
   images: {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -49,6 +73,7 @@ const nextConfig = {
       // fs: {
       //   browser: './empty.ts', // We recommend to fix code imports before using this method
       // },
+      '@/config/db/schema': schemaAliasTarget,
     },
   },
   experimental: {
