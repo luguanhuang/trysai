@@ -13,7 +13,11 @@
     },
     "nav": {
       "items": [
-
+        {
+          "title": "chatbot",
+          "url": "/chat",
+          "icon": "RiMessage2Line"
+        }
       ]
     },
     "buttons": [],
