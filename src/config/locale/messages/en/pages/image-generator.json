@@ -1,0 +1,63 @@
+{
+  "page": {
+    "show_sections": [
+      "hero",
+      "features",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI Image Generator",
+        "highlight_text": "AI Image",
+        "description": "Create stunning, high-quality images from text descriptions in seconds.<br/>Powered by the latest AI models.",
+        "buttons": [
+          {
+            "title": "Generate Now",
+            "icon": "Zap",
+            "url": "/ai-image-generator",
+            "target": "_self",
+            "variant": "default"
+          }
+        ],
+        "show_avatars": false,
+        "show_award": false
+      },
+      "features": {
+        "id": "features",
+        "title": "Powerful Image Generation",
+        "description": "Everything you need to create amazing AI-generated images.",
+        "items": [
+          {
+            "title": "Text to Image",
+            "description": "Describe your vision in words and watch AI bring it to life with stunning accuracy.",
+            "icon": "RiImage2Line"
+          },
+          {
+            "title": "Multiple Styles",
+            "description": "Choose from photorealistic, artistic, anime, and many more visual styles.",
+            "icon": "RiPaletteLine"
+          },
+          {
+            "title": "High Resolution",
+            "description": "Generate high-resolution images suitable for professional use.",
+            "icon": "RiZoomInLine"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Start Creating Images Today",
+        "description": "Join thousands of creators using Trys.ai to generate stunning images.",
+        "buttons": [
+          {
+            "title": "Get Started Free",
+            "url": "/sign-in",
+            "target": "_self",
+            "variant": "default"
+          }
+        ]
+      }
+    }
+  }
+}

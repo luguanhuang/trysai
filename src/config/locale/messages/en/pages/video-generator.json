@@ -1,0 +1,63 @@
+{
+  "page": {
+    "show_sections": [
+      "hero",
+      "features",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI Video Generator",
+        "highlight_text": "AI Video",
+        "description": "Transform your ideas into stunning videos with AI-powered generation.<br/>No editing skills required.",
+        "buttons": [
+          {
+            "title": "Generate Video",
+            "icon": "Zap",
+            "url": "/video-generator",
+            "target": "_self",
+            "variant": "default"
+          }
+        ],
+        "show_avatars": false,
+        "show_award": false
+      },
+      "features": {
+        "id": "features",
+        "title": "AI-Powered Video Creation",
+        "description": "Everything you need to create stunning videos with AI.",
+        "items": [
+          {
+            "title": "Text to Video",
+            "description": "Describe your scene and let AI generate a professional-quality video for you.",
+            "icon": "RiVideoLine"
+          },
+          {
+            "title": "Multiple Formats",
+            "description": "Generate videos in various formats and resolutions for any platform.",
+            "icon": "RiFilmLine"
+          },
+          {
+            "title": "Fast Generation",
+            "description": "Get your AI-generated video in minutes, not hours.",
+            "icon": "RiFlashlightLine"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Start Creating Videos Today",
+        "description": "Join creators using Trys.ai to generate stunning videos with AI.",
+        "buttons": [
+          {
+            "title": "Get Started Free",
+            "url": "/sign-in",
+            "target": "_self",
+            "variant": "default"
+          }
+        ]
+      }
+    }
+  }
+}

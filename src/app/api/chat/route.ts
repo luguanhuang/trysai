@@ -106,17 +106,20 @@ export async function POST(req: Request) {
       chatId,
       status: ChatMessageStatus.CREATED,
       page: 1,
-      limit: 10,
+      limit: 20,
     });
 
     let validatedMessages: UIMessage[] = [];
     if (previousMessages.length > 0) {
-      validatedMessages = previousMessages.reverse().map((message) => ({
+      // getChatMessages already returns messages in ascending order (oldest first)
+      // No need to reverse - send them to AI in chronological order
+      validatedMessages = previousMessages.map((message) => ({
         id: message.id,
         role: message.role,
         parts: message.parts ? JSON.parse(message.parts) : [],
       })) as UIMessage[];
     }
+
 
     const result = streamText({
       model: openrouter.chat(model),

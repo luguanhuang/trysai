@@ -56,21 +56,29 @@ export function ChatInput({
   // todo: get models from api
   const models: ChatModel[] = [
     {
+      title: 'Claude Opus 4.6',
+      name: 'anthropic/claude-opus-4.6',
+    },
+    {
+      title: 'Gemini 3 Pro Preview',
+      name: 'google/gemini-3-pro-preview',
+    },
+    {
       title: 'Kimi K2 Thinking',
       name: 'moonshotai/kimi-k2-thinking',
     },
-    {
-      title: 'Deepseek R1',
-      name: 'deepseek/deepseek-r1',
-    },
-    {
-      title: 'GPT-5',
-      name: 'openai/gpt-5',
-    },
-    {
-      title: 'Claude 4.5 Sonnet',
-      name: 'anthropic/claude-4.5-sonnet',
-    },
+    // {
+    //   title: 'Deepseek R1',
+    //   name: 'deepseek/deepseek-r1',
+    // },
+    // {
+    //   title: 'GPT-5',
+    //   name: 'openai/gpt-5',
+    // },
+    // {
+    //   title: 'Claude 4.5 Sonnet',
+    //   name: 'anthropic/claude-4.5-sonnet',
+    // },
   ];
 
   const [model, setModel] = useState<string>(models[0].name);

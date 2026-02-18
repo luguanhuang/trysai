@@ -1,0 +1,63 @@
+{
+  "page": {
+    "show_sections": [
+      "hero",
+      "features",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI Music Generator",
+        "highlight_text": "AI Music",
+        "description": "Create original music and audio content with AI-powered tools.<br/>From background tracks to full compositions.",
+        "buttons": [
+          {
+            "title": "Generate Music",
+            "icon": "Zap",
+            "url": "/music-generator",
+            "target": "_self",
+            "variant": "default"
+          }
+        ],
+        "show_avatars": false,
+        "show_award": false
+      },
+      "features": {
+        "id": "features",
+        "title": "AI-Powered Music Creation",
+        "description": "Everything you need to create original music with AI.",
+        "items": [
+          {
+            "title": "Text to Music",
+            "description": "Describe the mood, genre, and style, and let AI compose original music for you.",
+            "icon": "RiMusic2Line"
+          },
+          {
+            "title": "Multiple Genres",
+            "description": "Generate music in any genre — pop, classical, jazz, electronic, and more.",
+            "icon": "RiHeadphoneLine"
+          },
+          {
+            "title": "Instant Download",
+            "description": "Download your AI-generated music in high quality audio formats.",
+            "icon": "RiDownloadLine"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Start Creating Music Today",
+        "description": "Join creators using Trys.ai to generate original music with AI.",
+        "buttons": [
+          {
+            "title": "Get Started Free",
+            "url": "/sign-in",
+            "target": "_self",
+            "variant": "default"
+          }
+        ]
+      }
+    }
+  }
+}
