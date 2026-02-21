@@ -161,8 +161,13 @@ export function VerifyEmailPage({
       await checkSessionAndRedirect();
       if (attempts >= maxAttempts) return;
       // keep polling only while we're not signed in yet
-      const { data } = await authClient.getSession();
-      if (!data?.user) {
+      try {
+        const { data } = await authClient.getSession();
+        if (!data?.user) {
+          window.setTimeout(tick, 1000);
+        }
+      } catch {
+        // Network/extension fetch failures should not crash the page.
         window.setTimeout(tick, 1000);
       }
     };
@@ -261,32 +266,36 @@ export function VerifyEmailPage({
     }
     // Force a fresh session check (e.g. user verified in another tab).
     void (async () => {
-      await checkSessionAndRedirect();
-      const { data } = await authClient.getSession();
-      if (!data?.user) {
-        // If user verified in a different browser (no shared cookies),
-        // we can detect verified status and redirect them to sign-in.
-        const targetEmail = String(email || '')
-          .trim()
-          .toLowerCase();
-        if (targetEmail) {
-          try {
-            const res = await fetch('/api/user/is-email-verified', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json' },
-              body: JSON.stringify({ email: targetEmail }),
-            });
-            const json = await res.json().catch(() => null);
-            const verified = Boolean(json?.data?.emailVerified);
-            if (verified) {
-              hardNavigateToSignIn(targetEmail);
-              return;
+      try {
+        await checkSessionAndRedirect();
+        const { data } = await authClient.getSession();
+        if (!data?.user) {
+          // If user verified in a different browser (no shared cookies),
+          // we can detect verified status and redirect them to sign-in.
+          const targetEmail = String(email || '')
+            .trim()
+            .toLowerCase();
+          if (targetEmail) {
+            try {
+              const res = await fetch('/api/user/is-email-verified', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ email: targetEmail }),
+              });
+              const json = await res.json().catch(() => null);
+              const verified = Boolean(json?.data?.emailVerified);
+              if (verified) {
+                hardNavigateToSignIn(targetEmail);
+                return;
+              }
+            } catch {
+              // ignore
             }
-          } catch {
-            // ignore
           }
-        }
 
+          toast.error(t('verify_email_not_verified_yet'));
+        }
+      } catch {
         toast.error(t('verify_email_not_verified_yet'));
       }
     })();

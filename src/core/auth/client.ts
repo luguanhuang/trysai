@@ -11,6 +11,123 @@ function createGetSessionThrottledFetch({
   const inFlight = new Map<string, Promise<Response>>();
   let lastStartedAt = 0;
 
+  function getRawUrl(input: RequestInfo | URL) {
+    return typeof input === 'string'
+      ? input
+      : input instanceof URL
+        ? input.toString()
+        : input.url;
+  }
+
+  function getAbsoluteUrl(input: RequestInfo | URL) {
+    const base =
+      typeof window !== 'undefined' ? window.location.origin : 'http://local';
+    return new URL(getRawUrl(input), base).toString();
+  }
+
+  function createEmptySessionResponse() {
+    // Treat transient network/extension failures as "not signed in" for session checks.
+    return new Response(JSON.stringify({ user: null, session: null }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
+  }
+
+  async function xhrFetchGetSession(input: RequestInfo | URL, init?: RequestInit) {
+    if (typeof window === 'undefined' || typeof XMLHttpRequest === 'undefined') {
+      return fetch(input, init);
+    }
+
+    return new Promise<Response>((resolve) => {
+      const xhr = new XMLHttpRequest();
+      const url = getAbsoluteUrl(input);
+      const headers = new Headers(
+        input instanceof Request ? input.headers : undefined
+      );
+
+      if (init?.headers) {
+        const overrideHeaders = new Headers(init.headers);
+        overrideHeaders.forEach((value, key) => headers.set(key, value));
+      }
+
+      const cleanup = () => {
+        if (init?.signal) {
+          init.signal.removeEventListener('abort', onAbort);
+        }
+      };
+
+      const done = (response: Response) => {
+        cleanup();
+        resolve(response);
+      };
+
+      const onAbort = () => {
+        try {
+          xhr.abort();
+        } catch {
+          // ignore
+        }
+        done(createEmptySessionResponse());
+      };
+
+      if (init?.signal?.aborted) {
+        done(createEmptySessionResponse());
+        return;
+      }
+
+      if (init?.signal) {
+        init.signal.addEventListener('abort', onAbort, { once: true });
+      }
+
+      xhr.open('GET', url, true);
+      xhr.withCredentials = true;
+      xhr.timeout = 10_000;
+
+      headers.forEach((value, key) => {
+        try {
+          xhr.setRequestHeader(key, value);
+        } catch {
+          // ignore non-settable headers
+        }
+      });
+
+      xhr.onload = () => {
+        const status = xhr.status || 0;
+        if (status < 200 || status >= 300) {
+          done(createEmptySessionResponse());
+          return;
+        }
+        done(
+          new Response(xhr.responseText || '', {
+            status,
+            headers: { 'content-type': 'application/json' },
+          })
+        );
+      };
+
+      xhr.onerror = () => done(createEmptySessionResponse());
+      xhr.ontimeout = () => done(createEmptySessionResponse());
+      xhr.onabort = () => done(createEmptySessionResponse());
+
+      try {
+        xhr.send();
+      } catch {
+        done(createEmptySessionResponse());
+      }
+    });
+  }
+
+  async function safeFetchGetSession(
+    input: RequestInfo | URL,
+    init?: RequestInit
+  ) {
+    try {
+      return await xhrFetchGetSession(input, init);
+    } catch {
+      return createEmptySessionResponse();
+    }
+  }
+
   function isGetSessionRequest(input: RequestInfo | URL, init?: RequestInit) {
     const method =
       (
@@ -19,37 +136,27 @@ function createGetSessionThrottledFetch({
 
     if (method !== 'GET') return false;
 
-    const rawUrl =
-      typeof input === 'string'
-        ? input
-        : input instanceof URL
-          ? input.toString()
-          : input.url;
-
-    const base =
-      typeof window !== 'undefined' ? window.location.origin : 'http://local';
-    const url = new URL(rawUrl, base);
+    const url = new URL(getAbsoluteUrl(input));
     return url.pathname.endsWith('/get-session');
   }
 
   function getDedupeKey(input: RequestInfo | URL) {
-    const rawUrl =
-      typeof input === 'string'
-        ? input
-        : input instanceof URL
-          ? input.toString()
-          : input.url;
-
-    const base =
-      typeof window !== 'undefined' ? window.location.origin : 'http://local';
-    const url = new URL(rawUrl, base);
+    const url = new URL(getAbsoluteUrl(input));
     // Drop query/hash: session endpoint should be safe to dedupe across params.
     return `GET ${url.origin}${url.pathname}`;
   }
 
   return async (input, init) => {
-    if (!minIntervalMs || !isGetSessionRequest(input, init)) {
+    const isGetSession = isGetSessionRequest(input, init);
+
+    if (!isGetSession) {
       return fetch(input, init);
+    }
+
+    // Keep behavior stable when throttle is disabled, while still preventing
+    // uncaught fetch errors for session polling.
+    if (!minIntervalMs) {
+      return safeFetchGetSession(input, init);
     }
 
     const key = getDedupeKey(input);
@@ -64,7 +171,7 @@ function createGetSessionThrottledFetch({
         await new Promise((r) => setTimeout(r, waitMs));
       }
       lastStartedAt = Date.now();
-      return fetch(input, init);
+      return safeFetchGetSession(input, init);
     })().finally(() => {
       inFlight.delete(key);
     });

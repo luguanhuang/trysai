@@ -25,8 +25,8 @@
         },
         {
           "title": "Music Generator",
-          "url": "/music-generator",
-          "icon": "RiMusic2Line"
+          "url": "/ai-music-generator",
+          "icon": "Music"
         },
         {
           "title": "Video Generator",
